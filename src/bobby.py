@@ -1,8 +1,5 @@
-import time
 from motion import Motion
+from message_receiver import MessageReceiver
 
 motion_module = Motion()
-
-motion_module.move_forward()
-time.sleep(5)
-motion_module.stop_motion()
+MessageReceiver(motion_module)
