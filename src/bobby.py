@@ -1,8 +1,8 @@
 import time
-from gpiozero import Motor
+from motion import Motion
 
-right = Motor(26, 12)
-left = Motor(22,23)
-right.forward()
-left.forward()
+motion_module = Motion()
+
+motion_module.move_forward()
 time.sleep(5)
+motion_module.stop_motion()
