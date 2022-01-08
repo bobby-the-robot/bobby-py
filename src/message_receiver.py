@@ -11,7 +11,7 @@ class MessageReceiver:
         self.init()
 
     def callback(self, ch, method, properties, body):
-        command = str(body, 'utf-8')
+        command = body.decode('utf-8')
         if command == "FORWARD":
             self.motion_module.move_forward()
         elif command == "RIGHT":
