@@ -11,16 +11,17 @@ class MessageReceiver:
         self.init()
 
     def callback(self, ch, method, properties, body):
-        if body == "FORWARD":
+        command = str(body, 'utf-8')
+        if command == "FORWARD":
             self.motion_module.move_forward()
-        elif body == "RIGHT":
+        elif command == "RIGHT":
             self.motion_module.turn_right()
-        elif body == "LEFT":
+        elif command == "LEFT":
             self.motion_module.turn_left()
-        elif body == "BACK":
+        elif command == "BACK":
             self.motion_module.move_backward()
         else:
-            print("Command '%r' not recognized" % body)
+            print("Command '%r' not recognized" % command)
 
     def init(self):
         credentials = PlainCredentials(Config.rabbit_user, Config.rabbit_password)
