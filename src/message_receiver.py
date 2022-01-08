@@ -8,9 +8,22 @@ class MessageReceiver:
     def __init__(self, motion_module):
         self.queue_name = "motion.control"
         self.motion_module = motion_module
+        self.init()
 
     def callback(self, ch, method, properties, body):
-        print(" [x] Received %r" % body)
+        match body:
+            case "FORWARD":
+                self.motion_module.move_forward()
+            case "RIGHT":
+                self.motion_module.turn_right()
+            case "LEFT":
+                self.motion_module.turn_left()
+            case "BACK":
+                self.motion_module.move_backward()
+            case "STOP":
+                self.motion_module.stop_motion()
+            case _:
+                print("Command %r not recognized" % body)
 
     def init(self):
         credentials = PlainCredentials(Config.rabbit_user, Config.rabbit_password)
