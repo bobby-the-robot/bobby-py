@@ -1,7 +1,8 @@
+import time
 from gpiozero import Motor
 
-#bobby = Robot(left=(3,4), right=(25,26))
-#bobby.forward()
-
-right = Motor(25, 26)
+right = Motor(26, 12)
+left = Motor(22,23)
 right.forward()
+left.forward()
+time.sleep(5)
