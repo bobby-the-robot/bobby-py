@@ -12,6 +12,7 @@ class MessageReceiver:
 
     def callback(self, ch, method, properties, body):
         command = body.decode('utf-8')
+        print("Command [%r] received" % command)
         if command == "FORWARD":
             self.motion_module.move_forward()
         elif command == "RIGHT":
@@ -23,7 +24,7 @@ class MessageReceiver:
         elif command == "STOP":
             self.motion_module.stop_motion()
         else:
-            print("Command '%r' not recognized" % command)
+            print("Command [%r] not recognized" % command)
 
     def init(self):
         credentials = PlainCredentials(Config.rabbit_user, Config.rabbit_password)
@@ -31,5 +32,5 @@ class MessageReceiver:
             ConnectionParameters(Config.rabbit_host, Config.rabbit_port, Config.rabbit_user, credentials))
         channel = connection.channel()
         channel.basic_consume(queue=self.queue_name, auto_ack=True, on_message_callback=self.callback)
-        print(' [*] Waiting for messages. To exit press CTRL+C')
+        print('Motion module initialized')
         channel.start_consuming()
