@@ -8,8 +8,8 @@ left_backward_pin = 23
 
 class Motion:
     def __init__(self):
-        self.right = Motor(26, 12)
-        self.left = Motor(22, 23)
+        self.right = Motor(right_forward_pin, right_backward_pin)
+        self.left = Motor(left_forward_pin, left_backward_pin)
 
     def move_forward(self):
         self.right.forward()
