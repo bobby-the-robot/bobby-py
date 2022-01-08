@@ -20,6 +20,8 @@ class MessageReceiver:
             self.motion_module.turn_left()
         elif command == "BACK":
             self.motion_module.move_backward()
+        elif command == "STOP":
+            self.motion_module.stop_motion()
         else:
             print("Command '%r' not recognized" % command)
 
