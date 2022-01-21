@@ -38,12 +38,13 @@ with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
     #camera.rotation = 90
     camera.start_recording(output, format='mjpeg')
     try:
+        i = 0
         while True:
             with output.condition:
                 output.condition.wait()
                 frame = output.frame
-                print("sending a frame")
                 channel.basic_publish(exchange='', routing_key='video.frames', body=frame)
-                print("sent an image")
+                i = i + 1
+                print(i)
     finally:
         camera.stop_recording()
