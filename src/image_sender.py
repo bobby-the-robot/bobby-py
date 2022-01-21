@@ -32,7 +32,7 @@ with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
         ConnectionParameters(Config.rabbit_host, Config.rabbit_port, Config.rabbit_user, credentials))
     channel = connection.channel()
     #channel.exchange_declare(exchange='video.frames', exchange_type='fanout')
-    channel.queue_declare(queue='video.frames')
+    #channel.queue_declare(queue='video.frames')
     output = StreamingOutput()
     #Uncomment the next line to change your Pi's Camera rotation (in degrees)
     #camera.rotation = 90
@@ -42,6 +42,7 @@ with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
             with output.condition:
                 output.condition.wait()
                 frame = output.frame
+                print("sending a frame")
                 channel.basic_publish(exchange='', routing_key='video.frames', body=frame)
                 print("sent an image")
     finally:
