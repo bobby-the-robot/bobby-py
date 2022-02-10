@@ -1,11 +1,9 @@
 import io
 import picamera
+import requests
 from threading import Condition
 
-from pika import BlockingConnection
-from pika import ConnectionParameters
-from pika.credentials import PlainCredentials
-from config import Config
+from src.config import Config
 
 
 class StreamingOutput(object):
@@ -27,24 +25,15 @@ class StreamingOutput(object):
 
 
 with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
-    credentials = PlainCredentials(Config.rabbit_user, Config.rabbit_password)
-    connection = BlockingConnection(
-        ConnectionParameters(Config.rabbit_host, Config.rabbit_port, Config.rabbit_user, credentials))
-    channel = connection.channel()
-    #channel.exchange_declare(exchange='video.frames', exchange_type='fanout')
-    #channel.queue_declare(queue='video.frames')
     output = StreamingOutput()
     #Uncomment the next line to change your Pi's Camera rotation (in degrees)
     #camera.rotation = 90
     camera.start_recording(output, format='mjpeg')
     try:
-        i = 0
         while True:
             with output.condition:
                 output.condition.wait()
                 frame = output.frame
-                channel.basic_publish(exchange='', routing_key='video.frames', body=frame)
-                i = i + 1
-                print(i)
+                requests.post(Config.streaming_url, data=output.frame)
     finally:
         camera.stop_recording()
