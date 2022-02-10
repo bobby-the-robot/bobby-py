@@ -3,7 +3,7 @@ import picamera
 import requests
 from threading import Condition
 
-from src.config import Config
+from config import Config
 
 
 class StreamingOutput(object):
