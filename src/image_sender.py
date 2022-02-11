@@ -1,8 +1,8 @@
 import io
-import picamera
+from picamera import PiCamera
 import requests
 from threading import Condition
-
+from threading import Thread
 from config import Config
 
 
@@ -24,16 +24,21 @@ class StreamingOutput(object):
         return self.buffer.write(buf)
 
 
-with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
-    output = StreamingOutput()
-    #Uncomment the next line to change your Pi's Camera rotation (in degrees)
-    #camera.rotation = 90
-    camera.start_recording(output, format='mjpeg')
-    try:
-        while True:
-            with output.condition:
-                output.condition.wait()
-                frame = output.frame
-                requests.post(Config.streaming_url, data=output.frame)
-    finally:
-        camera.stop_recording()
+class ImageSender:
+    def __init__(self):
+        self.camera = PiCamera(resolution='640x480', framerate=12)
+        thread1 = Thread(target=self.run)
+        thread1.start()
+
+    def run(self):
+        output = StreamingOutput()
+        self.camera.rotation = 180
+        self.camera.start_recording(output, format='mjpeg')
+        try:
+            while True:
+                with output.condition:
+                    output.condition.wait()
+                    frame = output.frame
+                    requests.post(Config.streaming_url, data=output.frame)
+        finally:
+            self.camera.stop_recording()
