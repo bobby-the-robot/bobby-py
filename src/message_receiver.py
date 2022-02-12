@@ -1,4 +1,5 @@
 from config import Config
+import threading
 
 
 class MessageReceiver:
@@ -6,7 +7,7 @@ class MessageReceiver:
         self.queue_name = Config.motion_control_queue
         self.motion_module = motion_module
         self.amqp_channel = amqp_channel
-        self.init()
+        threading.Thread(target=self.init()).start()
 
     def callback(self, ch, method, properties, body):
         command = body.decode('utf-8')
