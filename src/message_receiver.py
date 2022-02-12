@@ -1,13 +1,11 @@
-from pika import BlockingConnection
-from pika import ConnectionParameters
-from pika.credentials import PlainCredentials
 from config import Config
 
 
 class MessageReceiver:
-    def __init__(self, motion_module):
-        self.queue_name = "motion.control"
+    def __init__(self, amqp_channel, motion_module):
+        self.queue_name = Config.motion_control_queue
         self.motion_module = motion_module
+        self.amqp_channel = amqp_channel
         self.init()
 
     def callback(self, ch, method, properties, body):
@@ -27,10 +25,6 @@ class MessageReceiver:
             print("Command [%r] not recognized" % command)
 
     def init(self):
-        credentials = PlainCredentials(Config.rabbit_user, Config.rabbit_password)
-        connection = BlockingConnection(
-            ConnectionParameters(Config.rabbit_host, Config.rabbit_port, Config.rabbit_user, credentials))
-        channel = connection.channel()
-        channel.basic_consume(queue=self.queue_name, auto_ack=True, on_message_callback=self.callback)
+        self.amqp_channel.basic_consume(queue=self.queue_name, auto_ack=True, on_message_callback=self.callback)
         print('Motion module initialized')
-        channel.start_consuming()
+        self.amqp_channel.start_consuming()
