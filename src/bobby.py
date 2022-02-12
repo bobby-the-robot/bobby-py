@@ -8,6 +8,9 @@ amqp_channel_factory = ChannelFactory()
 ampq_channel = amqp_channel_factory.get_channel()
 
 MessageReceiver(ampq_channel, Motion())
+
+print("Start image sender")
+
 ImageSender(ampq_channel) #check if it blocks anything
 
 print("Bingo!")
