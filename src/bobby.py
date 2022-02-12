@@ -9,11 +9,11 @@ amqp_channel_factory = ChannelFactory()
 ampq_channel = amqp_channel_factory.get_channel()
 
 
-def start_message_receiver(self):
+def start_message_receiver():
     MessageReceiver(ampq_channel, Motion())
 
 
-def start_image_sender(self):
+def start_image_sender():
     ImageSender(ampq_channel)
 
 
