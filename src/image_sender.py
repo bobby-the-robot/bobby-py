@@ -1,7 +1,6 @@
 import io
 from picamera import PiCamera
 from threading import Condition
-from threading import Thread
 from config import Config
 
 
@@ -25,10 +24,10 @@ class StreamingOutput(object):
 
 class ImageSender:
     def __init__(self, amqp_channel):
+        print("Initializing video streaming...")
         self.amqp_channel = amqp_channel
         self.camera = PiCamera(resolution='640x480', framerate=12)
-        thread1 = Thread(target=self.run)
-        thread1.start()
+        self.run()
 
     def run(self):
         output = StreamingOutput()
