@@ -6,15 +6,14 @@ from image_sender import ImageSender
 from amqp_connection import ChannelFactory
 
 amqp_channel_factory = ChannelFactory()
-ampq_channel = amqp_channel_factory.get_channel()
 
 
 def start_message_receiver():
-    MessageReceiver(ampq_channel, Motion())
+    MessageReceiver(amqp_channel_factory.get_channel(), Motion())
 
 
 def start_image_sender():
-    ImageSender(ampq_channel)
+    ImageSender(amqp_channel_factory.get_channel())
 
 
 msg_thread = threading.Thread(target=start_message_receiver)
