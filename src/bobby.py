@@ -7,7 +7,7 @@ from amqp_connection import ChannelFactory
 amqp_channel_factory = ChannelFactory()
 ampq_channel = amqp_channel_factory.get_channel()
 
-MessageReceiver(ampq_channel, Motion())
+#MessageReceiver(ampq_channel, Motion())
 
 print("Start image sender")
 
