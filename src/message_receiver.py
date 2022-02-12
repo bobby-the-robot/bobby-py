@@ -7,7 +7,7 @@ class MessageReceiver:
         self.queue_name = Config.motion_control_queue
         self.motion_module = motion_module
         self.amqp_channel = amqp_channel
-        threading.Thread(target=self.init()).start()
+        self.init()
 
     def callback(self, ch, method, properties, body):
         command = body.decode('utf-8')
@@ -26,6 +26,9 @@ class MessageReceiver:
             print("Command [%r] not recognized" % command)
 
     def init(self):
+        threading.Thread(target=self.consume()).start()
+
+    def consume(self):
         self.amqp_channel.basic_consume(queue=self.queue_name, auto_ack=True, on_message_callback=self.callback)
         print('Motion module initialized')
         self.amqp_channel.start_consuming()
