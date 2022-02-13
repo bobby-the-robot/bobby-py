@@ -2,7 +2,7 @@ import io
 from picamera import PiCamera
 from threading import Condition
 from config import Config
-from datetime import datetime
+import requests
 
 
 class StreamingOutput(object):
@@ -24,10 +24,9 @@ class StreamingOutput(object):
 
 
 class ImageSender:
-    def __init__(self, amqp_channel):
+    def __init__(self):
         print("Initializing video streaming...")
-        self.amqp_channel = amqp_channel
-        self.camera = PiCamera(resolution='640x480', framerate=5)
+        self.camera = PiCamera(resolution='640x480', framerate=10)
         self.run()
 
     def run(self):
@@ -38,11 +37,6 @@ class ImageSender:
             while True:
                 with output.condition:
                     output.condition.wait()
-                    now = datetime.now()
-
-                    current_time = now.strftime("%H:%M:%S:%f")
-                    print("Current Time =", current_time)
-                    self.amqp_channel.basic_publish(
-                        exchange='', routing_key=Config.video_streaming_queue, body=output.frame)
+                    requests.post(Config.streaming_url, data=output.frame)
         finally:
             self.camera.stop_recording()
