@@ -1,6 +1,7 @@
 import io
 from picamera import PiCamera
 from threading import Condition
+from threading import Thread
 from config import Config
 import requests
 
@@ -27,7 +28,8 @@ class ImageSender:
     def __init__(self):
         print("Initializing video streaming...")
         self.camera = PiCamera(resolution='640x480', framerate=10)
-        self.run()
+        thread1 = Thread(target=self.run)
+        thread1.start()
 
     def run(self):
         output = StreamingOutput()
