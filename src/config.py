@@ -7,3 +7,4 @@ class Config:
     rabbit_user = os.getenv("RABBIT_USER")
     rabbit_password = os.getenv("RABBIT_PASSWORD")
     streaming_url = os.getenv("STREAMING_URL")
+    motion_control_queue = "motion.control"
