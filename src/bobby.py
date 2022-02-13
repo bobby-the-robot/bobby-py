@@ -8,10 +8,11 @@ from amqp_connection import ChannelFactory
 amqp_channel_factory = ChannelFactory()
 
 
+ImageSender(amqp_channel_factory.get_channel())
+
 #def start_message_receiver():
 #    MessageReceiver(amqp_channel_factory.get_channel(), Motion())
 
-MessageReceiver(amqp_channel_factory.get_channel(), Motion())
 
 #def start_image_sender():
 #    ImageSender(amqp_channel_factory.get_channel())
