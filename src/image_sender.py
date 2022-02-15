@@ -45,7 +45,8 @@ class ImageSender:
             while True:
                 with output.condition:
                     output.condition.wait()
-                    self.ws.send_binary(output.frame)
+                    #self.ws.send_binary(output.frame)
+                    self.ws.send("123")
         finally:
             self.ws.close()
             self.camera.stop_recording()
