@@ -58,7 +58,8 @@ class ImageSender:
                         payload = "aaa"
                     finally:
                         print("smth went wrong")
-                    self.ws.send(stomper.send("/client", payload))
+                    if payload:
+                        self.ws.send(stomper.send("/client", payload))
         finally:
             self.ws.close()
             self.camera.stop_recording()
