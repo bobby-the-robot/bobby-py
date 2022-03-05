@@ -30,7 +30,6 @@ class StreamingOutput(object):
 class ImageSender:
     def __init__(self):
         print("Initializing video streaming...")
-        self.ws = None
         self.camera = PiCamera(resolution='640x480', framerate=10)
         thread1 = Thread(target=self.run)
         thread1.start()
@@ -40,9 +39,9 @@ class ImageSender:
         self.camera.rotation = 180
         self.camera.start_recording(output, format='mjpeg')
         try:
-            self.ws = create_connection(Config.streaming_connection_url)
-            self.ws.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
-            self.ws.send(stomper.subscribe("/client", "MyuniqueId", ack="client"))
+            ws = create_connection(Config.streaming_connection_url)
+            ws.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
+            ws.send(stomper.subscribe("/client", "MyuniqueId", ack="client"))
             #self.ws.send(stomper.send("/client", "Hello there1"))
             #self.ws.send(stomper.send("/client", "Hello there2"))
             #self.ws.send(stomper.send("/client", "Hello there3"))
@@ -51,9 +50,9 @@ class ImageSender:
                     output.condition.wait()
                     frame = output.frame
                     if frame:
-                        self.ws.send(stomper.send("/client", base64.b64encode(frame).decode('ascii')))
+                        ws.send(stomper.send("/client", base64.b64encode(frame).decode('ascii')))
                     else:
-                        self.ws.send(stomper.send("/client", ""))
+                        ws.send(stomper.send("/client", ""))
         finally:
             self.camera.stop_recording()
             self.camera.close()
