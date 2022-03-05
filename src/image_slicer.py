@@ -4,7 +4,7 @@ from threading import Condition
 from threading import Thread
 from config import Config
 from websocket import create_connection
-from stomp import Connection10
+from stomp import Connection
 from stomp import PrintingListener
 import base64
 #from image_sender import ImageSender
@@ -41,8 +41,8 @@ class ImageSender:
         self.camera.rotation = 180
         self.camera.start_recording(output, format='mjpeg')
         try:
-            c = Connection10([(Config.streaming_connection_url, 80)])
-            c.set_listener('', PrintingListener())
+            c = Connection([(Config.streaming_connection_url, 80)])
+            #c.set_listener('', PrintingListener())
             # self.c.connect('admin', 'password', wait=True)
             c.connect('', '', wait=True)
             #c.connect(wait=True)
