@@ -44,7 +44,7 @@ class ImageSender:
             c = Connection([(Config.streaming_connection_url, 80)])
             c.set_listener('', PrintingListener())
             # self.c.connect('admin', 'password', wait=True)
-            c.connect()
+            c.connect('', '', wait=True)
             #c.connect(wait=True)
             c.subscribe('/client', "123")
             #self.ws = create_connection(Config.streaming_connection_url)
