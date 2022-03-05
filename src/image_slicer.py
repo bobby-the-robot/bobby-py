@@ -5,6 +5,7 @@ from threading import Thread
 from config import Config
 from websocket import create_connection
 from stomp import Connection
+from stomp import PrintingListener
 import base64
 #from image_sender import ImageSender
 
