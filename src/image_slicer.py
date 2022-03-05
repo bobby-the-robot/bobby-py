@@ -55,7 +55,6 @@ class ImageSender:
                     if msg:
                         ws.send(stomper.send("/client", msg))
                         #ws.send(stomper.send("/client", output.frame))
-                    time.sleep(1)
         finally:
             self.camera.stop_recording()
             self.camera.close()
