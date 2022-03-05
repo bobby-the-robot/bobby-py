@@ -32,7 +32,8 @@ class StreamingOutput(object):
 class ImageSender:
     def __init__(self):
         print("Initializing video streaming...")
-        self.camera = PiCamera(resolution='640x480', framerate=10)
+        #self.camera = PiCamera(resolution='640x480', framerate=10)
+        self.camera = PiCamera(resolution='320x240', framerate=10)
         thread1 = Thread(target=self.run)
         thread1.start()
 
