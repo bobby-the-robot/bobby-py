@@ -52,8 +52,8 @@ class ImageSender:
                     payload = None
                     try:
                         payload = base64.b64encode(output.frame)
-                    finally:
-                        print("smth went wrong")
+                    except Exception as e:
+                        print(e)
                     self.ws.send(stomper.send("/client", payload))
         finally:
             self.ws.close()
