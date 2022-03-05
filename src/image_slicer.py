@@ -40,7 +40,7 @@ class ImageSender:
         self.camera.rotation = 180
         self.camera.start_recording(output, format='mjpeg')
         try:
-            #sender = ImageSender()
+            sender = ImageSender()
             #self.ws = create_connection(Config.streaming_connection_url)
             #self.ws.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
             #sub = stomper.subscribe("/client", "MyuniqueId", ack="auto")
