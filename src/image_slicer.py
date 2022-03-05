@@ -28,6 +28,7 @@ class ImageSender:
     def __init__(self):
         print("Initializing video streaming...")
         self.camera = PiCamera(resolution='640x480', framerate=10)
+        self.sender = ImageSender()
         thread1 = Thread(target=self.run)
         thread1.start()
 
@@ -36,12 +37,11 @@ class ImageSender:
         self.camera.rotation = 180
         self.camera.start_recording(output, format='mjpeg')
         try:
-            sender = ImageSender()
+
             while True:
                 with output.condition:
                     output.condition.wait()
-                    print(output.frame)
-                    sender.send(output.frame)
+                    self.sender.send(output.frame)
                     #print(output.frame)
                     #payload = 'aaa'
                     #try:
