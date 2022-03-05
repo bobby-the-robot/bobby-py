@@ -1,6 +1,6 @@
 from motion import Motion
 from message_receiver import MessageReceiver
-from image_sender import ImageSender
+from image_slicer import ImageSender
 from amqp_connection import ChannelFactory
 
 amqp_channel_factory = ChannelFactory()
