@@ -42,7 +42,7 @@ class ImageSender:
         try:
             self.ws = create_connection(Config.streaming_connection_url)
             self.ws.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
-            self.ws.send(stomper.subscribe("/client", "MyuniqueId", ack="auto"))
+            self.ws.send(stomper.subscribe("/client", "MyuniqueId", ack="client"))
             #self.ws.send(stomper.send("/client", "Hello there1"))
             #self.ws.send(stomper.send("/client", "Hello there2"))
             #self.ws.send(stomper.send("/client", "Hello there3"))
