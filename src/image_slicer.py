@@ -66,3 +66,4 @@ class ImageSender:
         finally:
             #self.ws.close()
             self.camera.stop_recording()
+            self.camera.close()
