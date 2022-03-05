@@ -51,7 +51,7 @@ class ImageSender:
             while True:
                 with output.condition:
                     output.condition.wait()
-                    print(output.frame)
+                    #print(output.frame)
                     self.ws.send(stomper.send("/client", "qwerty"))
                     #self.sender.send(output.frame)
                     #print(output.frame)
