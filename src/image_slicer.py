@@ -52,6 +52,8 @@ class ImageSender:
                     frame = output.frame
                     if frame:
                         self.ws.send(stomper.send("/client", base64.b64encode(frame).decode('ascii')))
+                    else:
+                        self.ws.send(stomper.send("/client", ""))
         finally:
             self.camera.stop_recording()
             self.camera.close()
