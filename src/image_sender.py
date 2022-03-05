@@ -49,6 +49,9 @@ class ImageSender:
             while True:
                 with output.condition:
                     output.condition.wait()
+                    print("!!!!!!!!!!!!!!!!")
+                    print(base64.b64encode(output.frame))
+                    print("!!!!!!!!!!!!!!!!")
                     self.ws.send(stomper.send("/client", base64.b64encode(output.frame)))
         finally:
             self.ws.close()
