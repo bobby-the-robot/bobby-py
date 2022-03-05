@@ -48,10 +48,7 @@ class ImageSender:
             while True:
                 with output.condition:
                     output.condition.wait()
-                    print("123")
-                    #self.ws.send_binary(output.frame)
-                    #self.ws.send("123")
-                    self.ws.send(stomper.send("/client", "Hello there33"))
+                    self.ws.send_binary(stomper.send("/client", output.frame))
         finally:
             self.ws.close()
             self.camera.stop_recording()
