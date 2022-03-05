@@ -40,7 +40,7 @@ class ImageSender:
             while True:
                 with output.condition:
                     output.condition.wait()
-                    sender.send("qwe")
+                    sender.send(output.frame)
                     #print(output.frame)
                     #payload = 'aaa'
                     #try:
