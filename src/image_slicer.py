@@ -3,7 +3,6 @@ from picamera import PiCamera
 from threading import Condition
 from threading import Thread
 import base64
-from image_sender import ImageSender
 
 from websocket import create_connection
 import stomper
@@ -33,7 +32,6 @@ class ImageSender:
         print("Initializing video streaming...")
         self.ws = None
         self.camera = PiCamera(resolution='640x480', framerate=10)
-        #self.sender = ImageSender()
         thread1 = Thread(target=self.run)
         thread1.start()
 
@@ -51,21 +49,7 @@ class ImageSender:
             while True:
                 with output.condition:
                     output.condition.wait()
-                    #print(output.frame)
                     self.ws.send(stomper.send("/client", base64.b64encode(output.frame).decode('ascii')))
-                    #self.sender.send(output.frame)
-                    #print(output.frame)
-                    #payload = 'aaa'
-                    #try:
-                    #    base64_data = base64.b64encode(output.frame)
-                    #    payload = base64_data.decode('utf-8')
-                    #    print(payload)
-                    #    if payload:
-                    #        self.ws.send(stomper.send("/client", payload))
-                    #except Exception as e:
-                    #    print("ERROR!!!!")
-                    #    print(e)
-                    #self.ws.send(stomper.send("/client", output.frame))
         finally:
             self.camera.stop_recording()
             self.camera.close()
