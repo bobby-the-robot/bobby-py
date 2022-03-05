@@ -50,16 +50,10 @@ class ImageSender:
                 with output.condition:
                     output.condition.wait()
                     payload = 'aaa'
-                    try:
-                        base64_data = base64.b64encode(output.frame)
-                        payload = base64_data.decode('utf-8')
-                    except Exception as e:
-                        print(e)
-                        payload = "aaa"
-                    finally:
-                        print("smth went wrong")
-                    if payload:
-                        self.ws.send(stomper.send("/client", payload))
+                    #base64_data = base64.b64encode(output.frame)
+                    #payload = base64_data.decode('utf-8')
+
+                    self.ws.send(stomper.send("/client", output.frame), headers={'content-length': len(output.frame)})
         finally:
             self.ws.close()
             self.camera.stop_recording()
