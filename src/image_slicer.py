@@ -4,9 +4,9 @@ from threading import Condition
 from threading import Thread
 from config import Config
 from websocket import create_connection
-import stomp
+from stomp import Connection
 import base64
-from image_sender import ImageSender
+#from image_sender import ImageSender
 
 
 class StreamingOutput(object):
@@ -40,7 +40,11 @@ class ImageSender:
         self.camera.rotation = 180
         self.camera.start_recording(output, format='mjpeg')
         try:
-            sender = ImageSender()
+            c = Connection(vhost=Config.streaming_connection_url)
+            c.set_listener('', PrintingListener())
+            # self.c.connect('admin', 'password', wait=True)
+            c.connect(wait=True)
+            c.subscribe('/client', "123")
             #self.ws = create_connection(Config.streaming_connection_url)
             #self.ws.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
             #sub = stomper.subscribe("/client", "MyuniqueId", ack="auto")
@@ -51,7 +55,8 @@ class ImageSender:
             while True:
                 with output.condition:
                     output.condition.wait()
-                    print(output.frame)
+                    #print(output.frame)
+                    c.send('/client', "123333")
                     #payload = 'aaa'
                     #try:
                     #    base64_data = base64.b64encode(output.frame)
