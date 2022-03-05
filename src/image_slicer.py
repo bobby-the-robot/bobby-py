@@ -63,5 +63,5 @@ class ImageSender:
                     #    print(e)
                     sender.send("hello")
         finally:
-            self.ws.close()
+            #self.ws.close()
             self.camera.stop_recording()
