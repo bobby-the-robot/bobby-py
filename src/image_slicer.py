@@ -5,6 +5,10 @@ from threading import Thread
 import base64
 from image_sender import ImageSender
 
+from websocket import create_connection
+import stomper
+from config import Config
+
 
 class StreamingOutput(object):
     def __init__(self):
@@ -27,8 +31,9 @@ class StreamingOutput(object):
 class ImageSender:
     def __init__(self):
         print("Initializing video streaming...")
+        self.ws = None
         self.camera = PiCamera(resolution='640x480', framerate=10)
-        self.sender = ImageSender()
+        #self.sender = ImageSender()
         thread1 = Thread(target=self.run)
         thread1.start()
 
@@ -37,12 +42,18 @@ class ImageSender:
         self.camera.rotation = 180
         self.camera.start_recording(output, format='mjpeg')
         try:
-
+            self.ws = create_connection(Config.streaming_connection_url)
+            self.ws.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
+            self.ws.send(stomper.subscribe("/client", "MyuniqueId", ack="auto"))
+            self.ws.send(stomper.send("/client", "Hello there1"))
+            self.ws.send(stomper.send("/client", "Hello there2"))
+            self.ws.send(stomper.send("/client", "Hello there3"))
             while True:
                 with output.condition:
                     output.condition.wait()
                     print(output.frame)
-                    self.sender.send(output.frame)
+                    self.ws.send(stomper.send("/client", "qwerty"))
+                    #self.sender.send(output.frame)
                     #print(output.frame)
                     #payload = 'aaa'
                     #try:
