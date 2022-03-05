@@ -13,5 +13,4 @@ class ImageSender:
         self.ws.send(stomper.send("/client", "Hello there3"))
 
     def send(self, message):
-        #self.ws.send(stomper.send("/client", message))
-        self.ws.send(stomper.send("/client", "qwerty"))
+        self.ws.send(stomper.send("/client", message))
