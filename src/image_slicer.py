@@ -42,10 +42,9 @@ class ImageSender:
         self.camera.start_recording(output, format='mjpeg')
         try:
             c = Connection([(Config.streaming_connection_url, 80)])
-            #c.set_listener('', PrintingListener())
+            c.set_listener('', PrintingListener())
             # self.c.connect('admin', 'password', wait=True)
-            c.connect('', '', wait=True)
-            #c.connect(wait=True)
+            c.connect(wait=True)
             c.subscribe('/client', "123")
             #self.ws = create_connection(Config.streaming_connection_url)
             #self.ws.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
