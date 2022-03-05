@@ -4,7 +4,7 @@ from config import Config
 
 class ImageSender:
     def __init__(self):
-        self.c = Connection([(Config.streaming_connection_url, 80)])
+        self.c = Connection(vhost=Config.streaming_connection_url)
         self.c.set_listener('', PrintingListener())
         #self.c.connect('admin', 'password', wait=True)
         self.c.connect(wait=True)
