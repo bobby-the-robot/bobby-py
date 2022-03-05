@@ -4,7 +4,7 @@ from threading import Condition
 from threading import Thread
 from config import Config
 from websocket import create_connection
-from stomp import Connection
+from stomp import StompConnection12
 from stomp import PrintingListener
 import base64
 #from image_sender import ImageSender
@@ -41,9 +41,8 @@ class ImageSender:
         self.camera.rotation = 180
         self.camera.start_recording(output, format='mjpeg')
         try:
-            c = Connection([(Config.streaming_connection_url, 80)])
+            c = StompConnection12([(Config.streaming_connection_url, 80)])
             c.set_listener('', PrintingListener())
-            c.send('/client', "CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
             # self.c.connect('admin', 'password', wait=True)
             c.connect('', '', wait=True)
             #c.connect(wait=True)
