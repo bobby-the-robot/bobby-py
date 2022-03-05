@@ -26,7 +26,6 @@ class StreamingOutput(object):
 
 class ImageSender:
     def __init__(self):
-        self.ws = None
         print("Initializing video streaming...")
         self.camera = PiCamera(resolution='640x480', framerate=10)
         thread1 = Thread(target=self.run)
@@ -55,6 +54,5 @@ class ImageSender:
                     #    print(e)
                     #self.ws.send(stomper.send("/client", output.frame))
         finally:
-            self.ws.close()
             self.camera.stop_recording()
             self.camera.close()
