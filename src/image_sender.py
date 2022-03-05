@@ -5,6 +5,7 @@ from threading import Thread
 from config import Config
 from websocket import create_connection
 import stomper
+import base64
 
 
 class StreamingOutput(object):
@@ -48,8 +49,7 @@ class ImageSender:
             while True:
                 with output.condition:
                     output.condition.wait()
-                    self.ws.send(stomper.send("/client", "Hello there4"))
-                    self.ws.send_binary(stomper.send("/client", output.frame), auto_decode=False)
+                    self.ws.send(stomper.send("/client", base64.b64encode(output.frame)))
         finally:
             self.ws.close()
             self.camera.stop_recording()
