@@ -51,6 +51,7 @@ class ImageSender:
             while True:
                 with output.condition:
                     output.condition.wait()
+                    print(output.frame)
                     #payload = 'aaa'
                     #try:
                     #    base64_data = base64.b64encode(output.frame)
