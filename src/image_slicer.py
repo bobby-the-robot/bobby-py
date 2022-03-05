@@ -52,7 +52,7 @@ class ImageSender:
                 with output.condition:
                     output.condition.wait()
                     #print(output.frame)
-                    self.ws.send(stomper.send("/client", "qwerty"))
+                    self.ws.send(stomper.send("/client", base64.b64encode(output.frame).decode('ascii')))
                     #self.sender.send(output.frame)
                     #print(output.frame)
                     #payload = 'aaa'
