@@ -2,11 +2,8 @@ import io
 from picamera import PiCamera
 from threading import Condition
 from threading import Thread
-from config import Config
-from websocket import create_connection
-import stomper
 import base64
-#from image_sender import ImageSender
+from image_sender import ImageSender
 
 
 class StreamingOutput(object):
@@ -40,16 +37,11 @@ class ImageSender:
         self.camera.rotation = 180
         self.camera.start_recording(output, format='mjpeg')
         try:
-            self.ws = create_connection(Config.streaming_connection_url)
-            self.ws.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
-            sub = stomper.subscribe("/client", "MyuniqueId", ack="auto")
-            self.ws.send(stomper.subscribe("/client", "MyuniqueId", ack="auto"))
-            self.ws.send(stomper.send("/client", "Hello there1"))
-            self.ws.send(stomper.send("/client", "Hello there2"))
-            self.ws.send(stomper.send("/client", "Hello there3"))
+            sender = ImageSender()
             while True:
                 with output.condition:
                     output.condition.wait()
+                    sender.send("qwe")
                     #print(output.frame)
                     #payload = 'aaa'
                     #try:
@@ -62,7 +54,6 @@ class ImageSender:
                     #    print("ERROR!!!!")
                     #    print(e)
                     #self.ws.send(stomper.send("/client", output.frame))
-                    self.ws.send(stomper.send("/client", "asd"))
         finally:
             self.ws.close()
             self.camera.stop_recording()

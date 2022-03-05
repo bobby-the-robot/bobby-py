@@ -1,15 +1,16 @@
-from stomp import *
+from websocket import create_connection
+import stomper
 from config import Config
 
 
 class ImageSender:
     def __init__(self):
-        self.c = Connection(vhost=Config.streaming_connection_url)
-        self.c.set_listener('', PrintingListener())
-        #self.c.connect('admin', 'password', wait=True)
-        self.c.connect(wait=True)
-        self.c.subscribe('/client', "123")
+        self.ws = create_connection(Config.streaming_connection_url)
+        self.ws.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
+        self.ws.send(stomper.subscribe("/client", "MyuniqueId", ack="auto"))
+        self.ws.send(stomper.send("/client", "Hello there1"))
+        self.ws.send(stomper.send("/client", "Hello there2"))
+        self.ws.send(stomper.send("/client", "Hello there3"))
 
     def send(self, message):
-        self.c.send('/client', message)
-
+        self.ws.send(stomper.send("/client", message))
