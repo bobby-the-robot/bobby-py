@@ -49,12 +49,12 @@ class ImageSender:
             while True:
                 with output.condition:
                     output.condition.wait()
-                    payload = None
+                    payload = 'aaa'
                     try:
-                        payload = base64.b64encode(output.frame)
+                        base64_data = base64.b64encode(output.frame)
+                        payload = base64_data.decode('utf-8')
                     except Exception as e:
                         print(e)
-                        payload = "aaa"
                     finally:
                         print("smth went wrong")
                     self.ws.send(stomper.send("/client", payload))
