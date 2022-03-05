@@ -43,7 +43,7 @@ class ImageSender:
         try:
             c = Connection([(Config.streaming_connection_url, 80)])
             c.set_listener('', PrintingListener())
-            c.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
+            c.send('/client', "CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
             # self.c.connect('admin', 'password', wait=True)
             c.connect('', '', wait=True)
             #c.connect(wait=True)
