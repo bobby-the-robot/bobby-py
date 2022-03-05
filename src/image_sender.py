@@ -48,6 +48,7 @@ class ImageSender:
             while True:
                 with output.condition:
                     output.condition.wait()
+                    self.ws.send(stomper.send("/client", "Hello there4"))
                     self.ws.send_binary(stomper.send("/client", output.frame))
         finally:
             self.ws.close()
