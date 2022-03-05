@@ -41,7 +41,7 @@ class ImageSender:
         self.camera.rotation = 180
         self.camera.start_recording(output, format='mjpeg')
         try:
-            c = Connection([(Config.streaming_connection_url, 80)])
+            c = Connection([(Config.streaming_connection_url, 443)])
             c.set_listener('', PrintingListener())
             # self.c.connect('admin', 'password', wait=True)
             c.connect(wait=True)
