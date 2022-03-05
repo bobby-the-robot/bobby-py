@@ -42,7 +42,9 @@ class ImageSender:
             self.ws.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
             sub = stomper.subscribe("/client", "MyuniqueId", ack="auto")
             self.ws.send(sub)
-            self.ws.send(stomper.send("/client", "Hello there"))
+            self.ws.send(stomper.send("/client", "Hello there1"))
+            self.ws.send(stomper.send("/client", "Hello there2"))
+            self.ws.send(stomper.send("/client", "Hello there3"))
             while True:
                 with output.condition:
                     output.condition.wait()
