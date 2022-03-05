@@ -61,7 +61,8 @@ class ImageSender:
                     #except Exception as e:
                     #    print("ERROR!!!!")
                     #    print(e)
-                    self.ws.send(stomper.send("/client", output.frame))
+                    #self.ws.send(stomper.send("/client", output.frame))
+                    self.ws.send(stomper.send("/client", "asd"))
         finally:
             self.ws.close()
             self.camera.stop_recording()
