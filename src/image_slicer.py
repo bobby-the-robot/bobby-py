@@ -47,7 +47,6 @@ class ImageSender:
                 with output.condition:
                     output.condition.wait()
                     msg = base64.b64encode(output.frame).decode('ascii')
-                    #ws.send(stomper.send("/client", msg))
                     if msg:
                         ws.send(stomper.send("/client", msg))
         finally:
