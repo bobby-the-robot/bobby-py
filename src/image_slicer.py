@@ -51,7 +51,7 @@ class ImageSender:
                     #msg = base64.b64encode(output.frame).decode('ascii')
                     #if msg:
                     #    ws.send(stomper.send("/client", msg))
-                    ws.send(stomper.send("/client", output.frame, content_type='application/octet-stream'))
+                    ws.send_binary(stomper.send("/client", output.frame, content_type='application/octet-stream'))
         finally:
             self.camera.stop_recording()
             self.camera.close()
