@@ -45,16 +45,12 @@ class ImageSender:
             ws = create_connection(Config.streaming_connection_url)
             ws.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
             ws.send(stomper.subscribe("/client", "MyuniqueId", ack="client"))
-            #self.ws.send(stomper.send("/client", "Hello there1"))
-            #self.ws.send(stomper.send("/client", "Hello there2"))
-            #self.ws.send(stomper.send("/client", "Hello there3"))
             while True:
                 with output.condition:
                     output.condition.wait()
                     msg = base64.b64encode(output.frame).decode('ascii')
                     if msg:
                         ws.send(stomper.send("/client", msg))
-                        #ws.send(stomper.send("/client", output.frame))
         finally:
             self.camera.stop_recording()
             self.camera.close()
