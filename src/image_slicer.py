@@ -43,12 +43,9 @@ class ImageSender:
             ws = create_connection(Config.streaming_connection_url)
             ws.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
             ws.send(stomper.subscribe("/client", "MyuniqueId1", ack="client"))
-            print("subscribed to topic")
             while True:
                 with output.condition:
-                    print("awaiting for condition")
                     output.condition.wait()
-                    print("converting payload to base64")
                     msg = base64.b64encode(output.frame).decode('ascii')
                     ws.send(stomper.send("/client", msg))
         finally:
