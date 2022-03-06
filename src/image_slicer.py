@@ -43,6 +43,7 @@ class ImageSender:
             ws = create_connection(Config.streaming_connection_url)
             ws.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
             ws.send(stomper.subscribe("/client", "MyuniqueId", ack="client"))
+            print("subscribed to topic")
             while True:
                 with output.condition:
                     output.condition.wait()
