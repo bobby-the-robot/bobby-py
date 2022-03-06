@@ -3,9 +3,6 @@ from picamera import PiCamera
 from threading import Condition
 from threading import Thread
 import base64
-import requests
-
-import time
 
 from websocket import create_connection
 import stomper
@@ -43,17 +40,16 @@ class ImageSender:
         self.camera.rotation = 180
         self.camera.start_recording(output, format='mjpeg')
         try:
-            #ws = create_connection(Config.streaming_connection_url)
-            #ws.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
-            #ws.send(stomper.subscribe("/client", "MyuniqueId", ack="client"))
+            ws = create_connection(Config.streaming_connection_url)
+            ws.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
+            ws.send(stomper.subscribe("/client", "MyuniqueId", ack="client"))
             while True:
                 with output.condition:
                     output.condition.wait()
-                    requests.post("https://bobby-remote-stage.herokuapp.com/video/frames", data=output.frame)
-                    #msg = base64.b64encode(output.frame).decode('ascii')
-                    #if msg:
-                    #    ws.send(stomper.send("/client", msg))
-                    #ws.send_binary(stomper.send("/client", output.frame, content_type='application/octet-stream'))
+                    msg = base64.b64encode(output.frame).decode('ascii')
+                    #ws.send(stomper.send("/client", msg))
+                    if msg:
+                        ws.send(stomper.send("/client", msg))
         finally:
             self.camera.stop_recording()
             self.camera.close()
