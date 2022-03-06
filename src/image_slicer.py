@@ -47,7 +47,7 @@ class ImageSender:
             while True:
                 with output.condition:
                     print("awaiting for condition")
-                    output.condition.wait()
+                    #output.condition.wait()
                     print("converting payload to base64")
                     msg = base64.b64encode(output.frame).decode('ascii')
                     print(msg)
