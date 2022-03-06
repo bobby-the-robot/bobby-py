@@ -46,6 +46,7 @@ class ImageSender:
             print("subscribed to topic")
             while True:
                 with output.condition:
+                    print("awaiting for condition")
                     output.condition.wait()
                     msg = base64.b64encode(output.frame).decode('ascii')
                     print(msg)
