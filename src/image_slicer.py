@@ -30,7 +30,6 @@ class StreamingOutput(object):
 class ImageSender:
     def __init__(self):
         print("Initializing video streaming...")
-        #self.camera = PiCamera(resolution='640x480', framerate=10)
         self.camera = PiCamera(resolution='240x160', framerate=10)
         thread1 = Thread(target=self.run)
         thread1.start()
@@ -41,7 +40,6 @@ class ImageSender:
         self.camera.start_recording(output, format='mjpeg')
         try:
             ws = create_connection(Config.streaming_connection_url)
-            #ws.send(stomper.subscribe("/video", "MyuniqueId1", ack="client"))
             while True:
                 with output.condition:
                     output.condition.wait()
