@@ -4,8 +4,6 @@ from threading import Condition
 from threading import Thread
 import base64
 
-from websocket import create_connection
-import stomper
 from config import Config
 
 
@@ -28,9 +26,10 @@ class StreamingOutput(object):
 
 
 class ImageSender:
-    def __init__(self):
+    def __init__(self, remote_control):
         print("Initializing video streaming...")
         self.camera = PiCamera(resolution='240x160', framerate=10)
+        self.remote_control = remote_control
         thread1 = Thread(target=self.run)
         thread1.start()
 
@@ -39,12 +38,12 @@ class ImageSender:
         self.camera.rotation = 180
         self.camera.start_recording(output, format='mjpeg')
         try:
-            ws = create_connection(Config.streaming_connection_url)
+            self.remote_control.connect(Config.video_streaming_connection_url, '/video')
             while True:
                 with output.condition:
                     output.condition.wait()
                     msg = base64.b64encode(output.frame).decode('ascii')
-                    ws.send(stomper.send("/video", msg))
+                    self.remote_control.send(msg)
         finally:
             self.camera.stop_recording()
             self.camera.close()

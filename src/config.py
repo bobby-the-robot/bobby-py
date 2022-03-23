@@ -6,5 +6,5 @@ class Config:
     rabbit_port = os.getenv("RABBIT_PORT")
     rabbit_user = os.getenv("RABBIT_USER")
     rabbit_password = os.getenv("RABBIT_PASSWORD")
-    streaming_connection_url = os.getenv("STREAMING_CONNECTION_URL")
+    video_streaming_connection_url = os.getenv("VIDEO_STREAMING_CONNECTION_URL")
     motion_control_queue = "motion.control"
