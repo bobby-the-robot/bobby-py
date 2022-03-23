@@ -38,12 +38,12 @@ class ImageSender:
         self.camera.rotation = 180
         self.camera.start_recording(output, format='mjpeg')
         try:
-            self.remote_control.connect(Config.video_streaming_connection_url, '/video')
+            remote_connection = self.remote_control.connect(Config.video_streaming_connection_url, '/video')
             while True:
                 with output.condition:
                     output.condition.wait()
                     msg = base64.b64encode(output.frame).decode('ascii')
-                    self.remote_control.send(msg)
+                    remote_connection.send(msg)
         finally:
             self.camera.stop_recording()
             self.camera.close()
