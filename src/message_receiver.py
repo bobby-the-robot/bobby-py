@@ -5,9 +5,10 @@ from threading import Thread
 class MessageReceiver:
     def __init__(self, remote_control, motion_module):
         print("Initializing message receiver...")
+        connection_url = Config.motion_control_connection_url
+        motion_control_topic = Config.motion_control_topic
+        self.remote_control_connection = remote_control.subscribe(connection_url, motion_control_topic)
         self.motion_module = motion_module
-        self.remote_control = remote_control
-        self.remote_control.subscribe(Config.motion_control_connection_url, Config.motion_control_topic)
         new_thread = Thread(target=self.init)
         new_thread.start()
 
@@ -28,4 +29,4 @@ class MessageReceiver:
             print("Direction [%r] not recognized" % direction)
 
     def init(self):
-        self.remote_control.apply_callback(self.callback)
+        self.remote_control_connection.apply_callback(self.callback)
