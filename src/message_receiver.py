@@ -29,4 +29,5 @@ class MessageReceiver:
             print("Direction [%r] not recognized" % direction)
 
     def init(self):
+        print("init self..")
         self.remote_control_connection.apply_callback(self.callback)
