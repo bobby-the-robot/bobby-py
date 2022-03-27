@@ -5,9 +5,7 @@ from threading import Thread
 class MessageReceiver:
     def __init__(self, remote_control, motion_module):
         print("Initializing message receiver...")
-        connection_url = Config.motion_control_connection_url
-        motion_control_topic = Config.motion_control_topic
-        self.remote_control_connection = remote_control.subscribe(connection_url, motion_control_topic)
+        self.remote_control_connection = remote_control.subscribe(Config.motion_control_topic)
         self.motion_module = motion_module
         new_thread = Thread(target=self.init)
         new_thread.start()

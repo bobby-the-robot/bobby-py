@@ -38,9 +38,7 @@ class ImageSender:
         self.camera.rotation = 180
         self.camera.start_recording(output, format='mjpeg')
         try:
-            connection_url = Config.video_streaming_connection_url
-            destination = Config.video_streaming_destination
-            remote_connection = self.remote_control.connect(connection_url, destination)
+            remote_connection = self.remote_control.connect(Config.video_streaming_endpoint)
             while True:
                 with output.condition:
                     output.condition.wait()

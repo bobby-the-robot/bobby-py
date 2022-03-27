@@ -4,14 +4,16 @@ import random
 
 
 class RemoteControl:
-    def connect(self, url, destination):
-        return RemoteControlConnection(create_connection(url), destination)
+    def __init__(self, url):
+        self.connection = create_connection(url)
 
-    def subscribe(self, url, destination):
-        connection = create_connection(url)
+    def connect(self, destination):
+        return RemoteControlConnection(self.connection, destination)
+
+    def subscribe(self, destination):
         connection_id = random.randint(1, 1000)
-        connection.send(stomper.subscribe(destination, connection_id, ack="client"))
-        return RemoteControlConnection(connection, destination)
+        self.connection.send(stomper.subscribe(destination, connection_id, ack="client"))
+        return RemoteControlConnection(self.connection, destination)
 
 
 class RemoteControlConnection:
@@ -24,5 +26,6 @@ class RemoteControlConnection:
 
     def apply_callback(self, callback):
         while True:
+            print("test!")
             message = self.connection.recv()
             callback(message)
