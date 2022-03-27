@@ -1,30 +1,31 @@
 from config import Config
+from threading import Thread
 
 
 class MessageReceiver:
-    def __init__(self, amqp_channel, motion_module):
+    def __init__(self, remote_control, motion_module):
         print("Initializing message receiver...")
-        self.queue_name = Config.motion_control_queue
         self.motion_module = motion_module
-        self.amqp_channel = amqp_channel
-        self.init()
+        self.remote_control = remote_control
+        self.remote_control.subscribe(Config.motion_control_connection_url, Config.motion_control_topic)
+        new_thread = Thread(target=self.init)
+        new_thread.start()
 
-    def callback(self, ch, method, properties, body):
-        command = body.decode('utf-8')
-        print("Command [%r] received" % command)
-        if command == "FORWARD":
+    def callback(self, command):
+        direction = command.direction
+        print("Direction [%r] received" % direction)
+        if direction == "FORWARD":
             self.motion_module.move_forward()
-        elif command == "RIGHT":
+        elif direction == "RIGHT":
             self.motion_module.turn_right()
-        elif command == "LEFT":
+        elif direction == "LEFT":
             self.motion_module.turn_left()
-        elif command == "BACK":
+        elif direction == "BACK":
             self.motion_module.move_backward()
-        elif command == "STOP":
+        elif direction == "STOP":
             self.motion_module.stop_motion()
         else:
-            print("Command [%r] not recognized" % command)
+            print("Direction [%r] not recognized" % direction)
 
     def init(self):
-        self.amqp_channel.basic_consume(queue=self.queue_name, auto_ack=True, on_message_callback=self.callback)
-        self.amqp_channel.start_consuming()
+        self.remote_control.apply_callback(self.callback)

@@ -30,15 +30,17 @@ class ImageSender:
         print("Initializing video streaming...")
         self.camera = PiCamera(resolution='240x160', framerate=10)
         self.remote_control = remote_control
-        thread1 = Thread(target=self.run)
-        thread1.start()
+        new_thread = Thread(target=self.run)
+        new_thread.start()
 
     def run(self):
         output = StreamingOutput()
         self.camera.rotation = 180
         self.camera.start_recording(output, format='mjpeg')
         try:
-            remote_connection = self.remote_control.connect(Config.video_streaming_connection_url, '/video')
+            connection_url = Config.video_streaming_connection_url
+            destination = Config.video_streaming_destination
+            remote_connection = self.remote_control.connect(connection_url, destination)
             while True:
                 with output.condition:
                     output.condition.wait()
