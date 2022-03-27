@@ -31,4 +31,4 @@ class RemoteControlConnection:
             message = self.connection.recv()
             print("after receive")
             print(message)
-            callback(message)
+            #callback(message)
