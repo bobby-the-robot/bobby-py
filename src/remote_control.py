@@ -13,7 +13,6 @@ class RemoteControl:
     def subscribe(self, destination):
         connection_id = random.randint(1, 1000)
         self.connection.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
-        print(stomper.subscribe(destination, connection_id))
         self.connection.send(stomper.subscribe(destination, connection_id))
         return RemoteControlConnection(self.connection, destination)
 
@@ -27,8 +26,6 @@ class RemoteControlConnection:
         self.connection.send(stomper.send(self.destination, payload))
 
     def apply_callback(self, callback):
-        self.connection.send(stomper.subscribe(self.destination, 'aasd'))
-
         while True:
             print("before receive")
             message = self.connection.recv()
