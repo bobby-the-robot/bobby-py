@@ -27,6 +27,8 @@ class RemoteControlConnection:
         self.connection.send(stomper.send(self.destination, payload))
 
     def apply_callback(self, callback):
+        self.connection.send(stomper.subscribe(self.destination, 'aasd'))
+
         while True:
             print("before receive")
             message = self.connection.recv()
