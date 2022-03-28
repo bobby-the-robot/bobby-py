@@ -10,8 +10,7 @@ class MessageReceiver:
         new_thread = Thread(target=self.init)
         new_thread.start()
 
-    def callback(self, command):
-        direction = command.direction
+    def callback(self, direction):
         print("Direction [%r] received" % direction)
         if direction == "FORWARD":
             self.motion_module.move_forward()
@@ -27,5 +26,4 @@ class MessageReceiver:
             print("Direction [%r] not recognized" % direction)
 
     def init(self):
-        print("init self..")
         self.remote_control_connection.apply_callback(self.callback)

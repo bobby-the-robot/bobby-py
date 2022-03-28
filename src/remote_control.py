@@ -27,8 +27,5 @@ class RemoteControlConnection:
 
     def apply_callback(self, callback):
         while True:
-            print("before receive")
             message = self.connection.recv()
-            print("after receive")
-            print(message)
-            #callback(message)
+            callback(message)
