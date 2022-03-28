@@ -29,4 +29,4 @@ class RemoteControlConnection:
         while True:
             frame = self.connection.recv()
             message = stomper.unpack_frame(frame)
-            callback(message.body)
+            callback(message[0].body)
