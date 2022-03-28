@@ -41,6 +41,7 @@ class ImageSender:
             remote_connection = self.remote_control.connect(Config.video_streaming_endpoint)
             while True:
                 with output.condition:
+                    print("test")
                     output.condition.wait()
                     msg = base64.b64encode(output.frame).decode('ascii')
                     remote_connection.send(msg)
