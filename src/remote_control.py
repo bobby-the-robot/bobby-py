@@ -27,5 +27,6 @@ class RemoteControlConnection:
 
     def apply_callback(self, callback):
         while True:
-            message = self.connection.recv()
+            frame = self.connection.recv()
+            message = stomper.unpack_frame(frame)
             callback(message)
