@@ -12,7 +12,7 @@ class RemoteControl:
 
     def subscribe(self, destination):
         connection_id = random.randint(1, 1000)
-        #self.connection.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
+        self.connection.send("CONNECT\naccept-version:1.0,1.1,2.0\n\n\x00\n")
         self.connection.send(stomper.subscribe(destination, connection_id))
         return RemoteControlConnection(self.connection, destination)
 
