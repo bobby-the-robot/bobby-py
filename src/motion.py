@@ -14,12 +14,14 @@ class Motion:
         self.left = Motor(left_forward_pin, left_backward_pin)
 
     def stop(self):
+        print("stopping, unlocking")
         self.stop_motion()
         self.is_locked = False
 
     def move(self, direction):
         self.move_forward()
         if self.is_locked:
+            print("can't move, locked")
             return
         print("Direction [%r] received" % direction)
         self.is_locked = True
