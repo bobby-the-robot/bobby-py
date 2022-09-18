@@ -26,6 +26,7 @@ class Motion:
         print("Direction [%r] received" % direction)
         self.is_locked = True
         if direction == "FORWARD":
+            print("moving fwd")
             self.move_forward()
         elif direction == "RIGHT":
             self.turn_right()
