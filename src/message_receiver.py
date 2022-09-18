@@ -12,18 +12,7 @@ class MessageReceiver:
 
     def callback(self, direction):
         print("Direction [%r] received" % direction)
-        if direction == "FORWARD":
-            self.motion_module.move_forward()
-        elif direction == "RIGHT":
-            self.motion_module.turn_right()
-        elif direction == "LEFT":
-            self.motion_module.turn_left()
-        elif direction == "BACK":
-            self.motion_module.move_backward()
-        elif direction == "STOP":
-            self.motion_module.stop_motion()
-        else:
-            print("Direction [%r] not recognized" % direction)
+        self.motion_module.move(direction)
 
     def init(self):
         self.remote_control_connection.apply_callback(self.callback)
