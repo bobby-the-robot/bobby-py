@@ -1,4 +1,4 @@
-import time
+import threading
 from gpiozero import Motor
 
 right_forward_pin = 26
@@ -13,35 +13,30 @@ class Motion:
         self.right = Motor(right_forward_pin, right_backward_pin)
         self.left = Motor(left_forward_pin, left_backward_pin)
 
+    def stop(self):
+        self.stop_motion()
+        self.is_locked = False
+
     def move(self, direction):
         self.move_forward()
         if self.is_locked:
             return
-        try:
-            print("Direction [%r] received" % direction)
-            self.is_locked = True
-            print("locked")
-            if direction == "FORWARD":
-                self.move_forward()
-            elif direction == "RIGHT":
-                self.turn_right()
-            elif direction == "LEFT":
-                self.turn_left()
-            elif direction == "BACK":
-                self.move_backward()
-            elif direction == "STOP":
-                self.stop_motion()
-            else:
-                print("Direction [%r] not recognized" % direction)
-            print("start sleep")
-            time.sleep(0.33)
-            print("end sleep")
-        finally:
-            print("stopping motion")
+        print("Direction [%r] received" % direction)
+        self.is_locked = True
+        if direction == "FORWARD":
+            self.move_forward()
+        elif direction == "RIGHT":
+            self.turn_right()
+        elif direction == "LEFT":
+            self.turn_left()
+        elif direction == "BACK":
+            self.move_backward()
+        elif direction == "STOP":
             self.stop_motion()
-            print("unlocking")
-            self.is_locked = False
-            print("unlocked")
+        else:
+            print("Direction [%r] not recognized" % direction)
+        timer = threading.Timer(60.0, self.stop)
+        timer.start()
 
     def move_forward(self):
         self.right.forward()
