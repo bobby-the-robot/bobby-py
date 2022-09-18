@@ -14,6 +14,7 @@ class Motion:
         self.left = Motor(left_forward_pin, left_backward_pin)
 
     def move(self, direction):
+        self.move_forward()
         if self.is_locked:
             return
         try:
