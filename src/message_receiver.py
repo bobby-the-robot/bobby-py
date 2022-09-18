@@ -11,7 +11,6 @@ class MessageReceiver:
         new_thread.start()
 
     def callback(self, direction):
-        print("Direction [%r] received" % direction)
         self.motion_module.move(direction)
 
     def init(self):

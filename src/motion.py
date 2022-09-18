@@ -9,15 +9,17 @@ left_backward_pin = 23
 
 class Motion:
     def __init__(self):
-        self.is_blocked = False
+        self.is_locked = False
         self.right = Motor(right_forward_pin, right_backward_pin)
         self.left = Motor(left_forward_pin, left_backward_pin)
 
     def move(self, direction):
-        if self.is_blocked:
+        if self.is_locked:
             return
         try:
-            self.is_blocked = True
+            print("Direction [%r] received" % direction)
+            self.is_locked = True
+            print("locked")
             if direction == "FORWARD":
                 self.move_forward()
             elif direction == "RIGHT":
@@ -30,10 +32,15 @@ class Motion:
                 self.stop_motion()
             else:
                 print("Direction [%r] not recognized" % direction)
+            print("start sleep")
             time.sleep(0.33)
+            print("end sleep")
         finally:
+            print("stopping motion")
             self.stop_motion()
-            self.is_blocked = False
+            print("unlocking")
+            self.is_locked = False
+            print("unlocked")
 
     def move_forward(self):
         self.right.forward()
