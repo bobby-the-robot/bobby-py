@@ -34,7 +34,7 @@ class Motion:
             self.stop_motion()
         else:
             print("Direction [%r] not recognized" % direction)
-        timer = threading.Timer(0.5, self.stop)
+        timer = threading.Timer(0.2, self.stop)
         timer.start()
 
     def move_forward(self):
