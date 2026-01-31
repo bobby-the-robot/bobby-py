@@ -1,49 +1,48 @@
-import io
-from picamera import PiCamera
-from threading import Condition
-from threading import Thread
 import base64
+from threading import Thread
+
+import cv2
+from picamera2 import Picamera2
 
 from config import Config
 
 
-class StreamingOutput(object):
-    def __init__(self):
-        self.frame = None
-        self.buffer = io.BytesIO()
-        self.condition = Condition()
-
-    def write(self, buf):
-        if buf.startswith(b'\xff\xd8'):
-            # New frame, copy the existing buffer's content and notify all
-            # clients it's available
-            self.buffer.truncate()
-            with self.condition:
-                self.frame = self.buffer.getvalue()
-                self.condition.notify_all()
-            self.buffer.seek(0)
-        return self.buffer.write(buf)
-
-
 class ImageSender:
     def __init__(self, remote_control):
-        print("Initializing video streaming...")
-        self.camera = PiCamera(resolution='240x160', framerate=10)
+        print("Initializing video streaming (picamera2)...")
         self.remote_control = remote_control
-        new_thread = Thread(target=self.run)
-        new_thread.start()
+
+        self.camera = Picamera2()
+
+        config = self.camera.create_video_configuration(
+            main={"size": (240, 160), "format": "RGB888"}
+        )
+        self.camera.configure(config)
+
+        # Limit FPS to ~10
+        self.camera.set_controls({"FrameDurationLimits": (100000, 100000)})
+
+        self.camera.start()
+
+        Thread(target=self.run, daemon=True).start()
 
     def run(self):
-        output = StreamingOutput()
-        self.camera.rotation = 180
-        self.camera.start_recording(output, format='mjpeg')
+        remote_connection = self.remote_control.connect(Config.video_streaming_endpoint)
+
         try:
-            remote_connection = self.remote_control.connect(Config.video_streaming_endpoint)
             while True:
-                with output.condition:
-                    output.condition.wait()
-                    msg = base64.b64encode(output.frame).decode('ascii')
-                    remote_connection.send(msg)
+                frame = self.camera.capture_array()  # RGB ndarray
+
+                # Rotate 180 degrees (same as flip both axes). Remove if not needed.
+                frame = cv2.flip(frame, -1)
+
+                ok, jpg = cv2.imencode(".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), 70])
+                if not ok:
+                    continue
+
+                msg = base64.b64encode(jpg.tobytes()).decode("ascii")
+                remote_connection.send(msg)
+
         finally:
-            self.camera.stop_recording()
+            self.camera.stop()
             self.camera.close()
